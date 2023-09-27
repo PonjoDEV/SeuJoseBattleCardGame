@@ -7,13 +7,12 @@ import java.io.InputStream
 class CardReader (){
 
     companion object{
-        private lateinit var cards:List<Card>
+        private lateinit var cards:MutableList<Card>
 
         fun getCards():MutableList<Card>{
             if(!::cards.isInitialized){
                 val fileLine = readCardsCSV()
-                cards = fileLine.map { line -> stringToCards(line) }
-
+                cards = fileLine.map { line -> stringToCards(line) }.toMutableList()
                 //cartas = lerCartasCSV()
                 println(readCardsCSV())
             }

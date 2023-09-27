@@ -6,10 +6,14 @@ import model.Player
 //var remainingCards = 254;
 class FieldControl () {
     //Initializing Battle Field and players
-    fun createField(name1:String, name2:String, deck: List<Card>): Field {
-        var field:Field = Field(player1 = Player(name1), player2 = Player(name2), deck.toTypedArray())
+    fun createField(name1:String, name2:String, deck: MutableList<Card>): Field {
+        var field:Field = Field(player1 = Player(name1), player2 = Player(name2), deck = deck)
         println("O jogo vai começar! \nJogadores:\n${field.player1.name} X ${field.player2.name}\n Comecem!\n\n")
         return field
+    }
+
+    fun victory(player: Player,enemy: Player){
+
     }
 
     //Inverting position of the field
@@ -49,7 +53,6 @@ class FieldControl () {
                 return true
             }
         }
-
     }
 
     fun damageToLP(enemy:Player,damage: Int) {
@@ -65,7 +68,8 @@ class FieldControl () {
     }
 
     fun destroyMonster(monster:Card,enemyMonster:Card?=null){
-        //TODO if the monster hit has lower stat than its attacker, destroy it, if its both the same, destroy both monsters the moster location in the players field will become null
+        //TODO if the monster hit has lower stat than its attacker, destroy it, if its both the same,
+        // destroy both monsters the moster location in the players field will become null
 
     }
 

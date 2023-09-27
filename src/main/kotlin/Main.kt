@@ -1,6 +1,7 @@
 
 import control.FieldControl
 import control.PlayerControl
+import model.Card
 import model.Field
 import tools.CardReader
 
@@ -15,33 +16,35 @@ fun main(args: Array<String>) {
      */
 
     //Initializing the deck and shuffling the cards
-    val deck = CardReader.getCards().shuffled()
+    //Dont know why it need the toMutableList function
+    val deck:MutableList<Card> = CardReader.getCards().shuffled().toMutableList()
 
     for (card in deck ){
         println(card.name+"  ATK "+card.attack+" DEF "+card.defense+ " TYP "+card.cardClass)
     }
+
     println(deck.size)
 
     var field: Field = FieldControl().createField("Yugi","Kaiba",deck)
 
     var player = field.player1
     var enemy = field.player2
-    for (i in 1..5){
-        PlayerControl().drawCard(player,deck)
-        PlayerControl().drawCard(enemy,deck)
-    }
 
-    var deckSize:Int = deck.size-1
+    var i =20
 
+    //Need to put this into a view package
     do {
-
-        FieldControl().invertField(field)
+        PlayerControl().drawCard(player,deck)
+        for ( carta in player.hand){
+            println(carta?.name)
+        }
+        //FieldControl().invertField(field)
         player = field.player1
         enemy = field.player2
 
+        i--
 
-    }while (!FieldControl().noMoreCards(deck.size)&&!FieldControl().zeroLifePoints(field.player1)&&!FieldControl().zeroLifePoints(field.player2))
-
+    }while (i>0&&!FieldControl().noMoreCards(deck.size)&&!FieldControl().zeroLifePoints(field.player1)&&!FieldControl().zeroLifePoints(field.player2))
 
 }
 
