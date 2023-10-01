@@ -35,12 +35,14 @@ fun main(args: Array<String>) {
     //Need to put this into a view package
     do {
         FieldView().roundStart(field)
+        //println("Penislandia 3000")
+        FieldView().placePhase(field)
 
         FieldControl().invertField(field)
         player = field.player1
         enemy = field.player2
 
-        println("${deck.size} Cartas restantes")
+        println("${deck.size} Cartas restantes\n\n")
 
         i--
 

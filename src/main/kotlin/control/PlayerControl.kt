@@ -9,19 +9,13 @@ class PlayerControl (){
         var cardIndex = player.hand.size
         println("Selecione uma carta entre 1 e $cardIndex para descartar: ")
         cardIndex = readln().toInt()-1
-        var count:Int = 0
 
-        while (count<=2 && (cardIndex !in 0..<player.hand.size ||player.hand.get(cardIndex)==null)) {
+
+        while (cardIndex !in 0..<player.hand.size ||player.hand.get(cardIndex)==null) {
             println("Escolha uma posição válida")
             cardIndex= readln().toInt()-1
-            count++
         }
-        if (count<=5) {
-            player.hand.set(cardIndex, value = null)
-            return true
-        }else{
-            return false
-        }
+        return true
     }
 
     //Player has to draw a card
@@ -51,4 +45,13 @@ class PlayerControl (){
         println("#######################################################################################\n############################# Mão de ${player.name} #############################")
     }
 
+    //Checkign if the player has equippment cards on its hand
+    fun hasEquipmentCard(hand: Array<Card?>): Boolean {
+        return hand.any { CardControl().isEquipment(it) }
+    }
+
+    //Checking if the player have a monster card
+    fun hasMonsterCard(hand: Array<Card?>): Boolean {
+        return hand.any { !CardControl().isEquipment(it) }
+    }
 }

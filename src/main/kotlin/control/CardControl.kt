@@ -1,20 +1,22 @@
 package control
 
 import model.Card
+import model.Player
 
 class CardControl {
-    //Changing int o attack mode
+    //Changing into attack mode
     fun turnAttack(card: Card){
         card.attackMode = true
     }
 
-    //Changing int o defense mode
+    //Changing into defense mode
     fun turnDefense(card: Card){
         card.attackMode = false
     }
 
-    fun equipInto (equip:Card,monster:Card):Boolean{
-        if (equip.cardClass!="equipamento"||monster.cardClass!="monstro"){
+    //Equiping a equippment card into a monster
+    fun equipInto (player: Player, equip:Card,monster:Card):Boolean{
+        if (!isEquipment(equip)||!isMonster(monster)){
             println("Combinação inválida!")
             return false
         }else{
@@ -32,4 +34,21 @@ class CardControl {
         }
     }
 
+    //Check if its a monster
+    private fun isMonster(card: Card): Boolean {
+        if (card.cardClass=="monster") return true else return false
+    }
+
+    //Checms if its an equipmento
+    fun isEquipment(card: Card?):Boolean{
+        if (card != null) {
+            if (card.cardClass=="equipamento") {
+                return true
+            } else {
+                return false
+            }
+        }else{
+            return false
+        }
+    }
 }

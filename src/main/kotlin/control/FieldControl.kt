@@ -93,7 +93,6 @@ class FieldControl () {
 
     //Prints a single player's field
     fun printPlayerField(player: Player) {
-
         for (i in 0..player.field.size-1){
             print("(${i+1})")
             if (player.field.get(i) == null){
@@ -109,9 +108,55 @@ class FieldControl () {
         FieldControl().printPlayerField(field.player2)
         println("\n##############################################################################################################################################################################\n")
         FieldControl().printPlayerField(field.player1)
+        println("\n##############################################################################################################################################################################\n\n")
+    }
+    //Summoning a new monster and excluding it from the players hand
+    fun placeMonster(player: Player) {
+            println("Digite o número do monstro que deseja invocar\n")
+            val aux = readln().toInt()
+            val indexNull:Int = player.field.indexOf(player.field.find { it == null })
+            player.field.set(indexNull,player.hand.get(aux-1))
+            player.hand.set(aux,null)
+    }
+    //Checks if the player's field is full
+    fun fieldIsFull(field: Field): Boolean {
+        if (field.player1.field.all { it !=null}){
+            return true
+        }else{
+            return false
+        }
+    }
+    //Equipping a monster and deleting the equipment card from the players hand
+    fun placeEquipment(player: Player) {
+        println("Digite o número do equipamento que deseja usar")
+        var equip:Int = readln().toInt()
+        equip--
+
+        while (equip !in 0..player.hand.size-1 ){
+            println("Digite um número válido")
+            equip = readln().toInt()
+            equip--
+        }
+
+        println("Digite o número do monstro que deseja equipar\n")
+        var monster:Int = readln().toInt()
+        monster--
+
+        while (monster !in 0..player.field.size-1 ){
+            println("Digite um número válido")
+            monster = readln().toInt()
+            monster--
+        }
+        CardControl().equipInto(player, player.hand.get(equip)!!, player.field.get(monster)!!)
+        player.hand[equip]=null
     }
 
-
+    //Checks if the player's field is full
+    fun fieldIsEmpty(field: Field): Boolean {
+        if (field.player1.field.all { it ==null}){
+            return true
+        }else{
+            return false
+        }
+    }
 }
-
-
