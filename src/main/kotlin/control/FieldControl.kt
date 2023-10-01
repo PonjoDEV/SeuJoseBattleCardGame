@@ -13,10 +13,10 @@ class FieldControl () {
     }
 
     fun victory(player: Player,enemy: Player){
-
+        //TODO HOW'S THE GAME SUPPOSED TO FINISH ?
     }
 
-    //Inverting position of the field
+    //Inverting position of the field ** PLAYER 2 IS ALWAYS THE ENEMY IN THIS CASE
     fun invertField(field:Field){
         val tempPlayer = field.player1
         field.player1 = field.player2
@@ -73,6 +73,7 @@ class FieldControl () {
 
     }
 
+    //Checks if there are no more cards, its parameter is the deck's size
     fun noMoreCards(remainingCards: Int): Boolean {
         if (remainingCards == 0) {
             return true
@@ -81,6 +82,7 @@ class FieldControl () {
         }
     }
 
+    //checks if the player has reached 0 LP
     fun zeroLifePoints(player: Player): Boolean {
         if (player.lifePoints <= 0) {
             return true
@@ -89,6 +91,25 @@ class FieldControl () {
         }
     }
 
+    //Prints a single player's field
+    fun printPlayerField(player: Player) {
+
+        for (i in 0..player.field.size-1){
+            print("(${i+1})")
+            if (player.field.get(i) == null){
+                println("#######################################################################################")
+            }else{
+                println(player.field.get(i).toString())
+            }
+        }
+    }
+
+    //Prints the Whole field's content
+    fun printWholeField(field: Field) {
+        FieldControl().printPlayerField(field.player2)
+        println("\n##############################################################################################################################################################################\n")
+        FieldControl().printPlayerField(field.player1)
+    }
 
 
 }

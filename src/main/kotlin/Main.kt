@@ -1,9 +1,9 @@
 
 import control.FieldControl
-import control.PlayerControl
 import model.Card
 import model.Field
 import tools.CardReader
+import view.FieldView
 
 fun main(args: Array<String>) {
 
@@ -30,21 +30,21 @@ fun main(args: Array<String>) {
     var player = field.player1
     var enemy = field.player2
 
-    var i =20
+    var i =30
 
     //Need to put this into a view package
     do {
-        PlayerControl().drawCard(player,deck)
-        for ( carta in player.hand){
-            println(carta?.name)
-        }
-        //FieldControl().invertField(field)
+        FieldView().roundStart(field)
+
+        FieldControl().invertField(field)
         player = field.player1
         enemy = field.player2
 
+        println("${deck.size} Cartas restantes")
+
         i--
 
-    }while (i>0&&!FieldControl().noMoreCards(deck.size)&&!FieldControl().zeroLifePoints(field.player1)&&!FieldControl().zeroLifePoints(field.player2))
+    }while (i>2&&!FieldControl().noMoreCards(deck.size)&&!FieldControl().zeroLifePoints(field.player1)&&!FieldControl().zeroLifePoints(field.player2))
 
 }
 

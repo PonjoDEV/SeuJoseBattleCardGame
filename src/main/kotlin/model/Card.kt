@@ -7,4 +7,9 @@ class Card (var name:String, val description:String, var attack:Int, var defense
         var card = Card(name,description,attack.toInt(),defense.toInt(),cardClass,mode)
         return card
     }
+
+    override fun toString(): String {
+        return "'$name', $attack, $defense"
+    }
+
 }
