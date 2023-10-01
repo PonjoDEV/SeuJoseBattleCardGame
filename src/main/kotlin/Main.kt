@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
      */
 
     //Initializing the deck and shuffling the cards
-    //Dont know why it need the toMutableList function
+    //Don't know why it needs the toMutableList function
     val deck:MutableList<Card> = CardReader.getCards().shuffled().toMutableList()
 
     for (card in deck ){
@@ -27,9 +27,10 @@ fun main(args: Array<String>) {
 
     var field: Field = FieldControl().createField("Yugi","Kaiba",deck)
 
+    /*
     var player = field.player1
     var enemy = field.player2
-
+    */
     var i =30
 
     //Need to put this into a view package
@@ -39,8 +40,11 @@ fun main(args: Array<String>) {
         FieldView().placePhase(field)
 
         FieldControl().invertField(field)
+
+        /*
         player = field.player1
         enemy = field.player2
+         */
 
         println("${deck.size} Cartas restantes\n\n")
 

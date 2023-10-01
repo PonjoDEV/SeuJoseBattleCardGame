@@ -54,4 +54,9 @@ class PlayerControl (){
     fun hasMonsterCard(hand: Array<Card?>): Boolean {
         return hand.any { !CardControl().isEquipment(it) }
     }
+
+    //Checking if the player has unnequiped monsters, not wrking yet
+    fun hasUnequipedMonsters(field: Array<Card?>): Boolean {
+        return field.any { it.equipmentOn==false }
+    }
 }

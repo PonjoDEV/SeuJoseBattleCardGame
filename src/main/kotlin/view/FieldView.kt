@@ -13,10 +13,12 @@ class FieldView {
     }
 
     //Checks if the battlefield is full or not before calling the summon methods
-    fun placePhase(field: Field) {
-        if (FieldControl().fieldIsFull(field)) {
-            if (PlayerControl().hasEquipmentCard(field.player1.hand)&&!FieldControl().fieldIsEmpty(field)){
-                FieldControl().placeEquipment(field.player1)
+    fun placePhase(field: Field){
+        if (FieldControl().fieldIsFull(field)){
+            if(!FieldControl().fieldIsEmpty(field)){
+                if (PlayerControl().hasEquipmentCard(field.player1.hand) && PlayerControl().hasUnequipedMonsters(field.player1.field)) {
+                    FieldControl().placeEquipment(field.player1)
+                }
             }
         }else{
             if (PlayerControl().hasMonsterCard(field.player1.hand)) {

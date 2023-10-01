@@ -110,14 +110,7 @@ class FieldControl () {
         FieldControl().printPlayerField(field.player1)
         println("\n##############################################################################################################################################################################\n\n")
     }
-    //Summoning a new monster and excluding it from the players hand
-    fun placeMonster(player: Player) {
-            println("Digite o número do monstro que deseja invocar\n")
-            val aux = readln().toInt()
-            val indexNull:Int = player.field.indexOf(player.field.find { it == null })
-            player.field.set(indexNull,player.hand.get(aux-1))
-            player.hand.set(aux,null)
-    }
+
     //Checks if the player's field is full
     fun fieldIsFull(field: Field): Boolean {
         if (field.player1.field.all { it !=null}){
@@ -126,6 +119,25 @@ class FieldControl () {
             return false
         }
     }
+
+    //Checks if the player's field is full
+    fun fieldIsEmpty(field: Field): Boolean {
+        if (field.player1.field.all { it ==null}){
+            return true
+        }else{
+            return false
+        }
+    }
+
+    //Summoning a new monster and excluding it from the players hand
+    fun placeMonster(player: Player) {
+        println("Digite o número do monstro que deseja invocar\n")
+        val aux = readln().toInt()
+        val indexNull:Int = player.field.indexOf(player.field.find { it == null })
+        player.field.set(indexNull,player.hand.get(aux-1))
+        player.hand.set(aux,null)
+    }
+
     //Equipping a monster and deleting the equipment card from the players hand
     fun placeEquipment(player: Player) {
         println("Digite o número do equipamento que deseja usar")
@@ -151,12 +163,5 @@ class FieldControl () {
         player.hand[equip]=null
     }
 
-    //Checks if the player's field is full
-    fun fieldIsEmpty(field: Field): Boolean {
-        if (field.player1.field.all { it ==null}){
-            return true
-        }else{
-            return false
-        }
-    }
+
 }
