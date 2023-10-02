@@ -144,7 +144,7 @@ class FieldControl () {
         var equip:Int = readln().toInt()
         equip--
 
-        while (equip !in 0..player.hand.size-1 ){
+        while (equip !in 0..player.hand.size-1 || !CardControl().isEquipment(player.hand.get(equip)) ){
             println("Digite um número válido")
             equip = readln().toInt()
             equip--
@@ -154,7 +154,7 @@ class FieldControl () {
         var monster:Int = readln().toInt()
         monster--
 
-        while (monster !in 0..player.field.size-1 ){
+        while (monster !in 0..player.field.size-1 || CardControl().isEquipment(player.hand.get(monster)) ){
             println("Digite um número válido")
             monster = readln().toInt()
             monster--

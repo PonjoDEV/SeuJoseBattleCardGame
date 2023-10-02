@@ -16,7 +16,7 @@ class CardControl {
 
     //Equiping a equippment card into a monster
     fun equipInto (player: Player, equip:Card,monster:Card):Boolean{
-        if (!isEquipment(equip)||!isMonster(monster)){
+        if (!isEquipment(equip)||isEquipment(monster)){
             println("Combinação inválida!")
             return false
         }else{
@@ -33,13 +33,22 @@ class CardControl {
             }
         }
     }
-
-    //Check if its a monster
+    /*
+    //Check if it's a monster can actually just use isEquipment and expect false to validate
     private fun isMonster(card: Card): Boolean {
-        if (card.cardClass=="monster") return true else return false
+        if (card != null) {
+            if (card.cardClass=="monster") {
+                return true
+            } else {
+                return false
+            }
+        }else{
+            return false
+        }
     }
+     */
 
-    //Checms if its an equipmento
+    //Checms if it's an equipmento
     fun isEquipment(card: Card?):Boolean{
         if (card != null) {
             if (card.cardClass=="equipamento") {

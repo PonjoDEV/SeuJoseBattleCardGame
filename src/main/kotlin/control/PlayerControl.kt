@@ -47,16 +47,18 @@ class PlayerControl (){
 
     //Checkign if the player has equippment cards on its hand
     fun hasEquipmentCard(hand: Array<Card?>): Boolean {
-        return hand.any { CardControl().isEquipment(it) }
+        return hand.any { it!=null && it.cardClass == "equipamento"}
     }
 
     //Checking if the player have a monster card
     fun hasMonsterCard(hand: Array<Card?>): Boolean {
-        return hand.any { !CardControl().isEquipment(it) }
+        return hand.any { it!=null && it.cardClass == "monstro"}
     }
 
-    //Checking if the player has unnequiped monsters, not wrking yet
-    fun hasUnequipedMonsters(field: Array<Card?>): Boolean {
-        return field.any { it.equipmentOn==false }
+    //Checking if the player has unequipped monsters, not working yet
+    fun hasUnequippedMonsters(field: Array<Card?>): Boolean {
+        return field.any {
+            it!=null && !it.equipmentOn
+        }
     }
 }
