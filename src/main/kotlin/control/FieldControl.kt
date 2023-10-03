@@ -132,9 +132,15 @@ class FieldControl () {
     //Summoning a new monster and excluding it from the players hand
     fun placeMonster(player: Player) {
         println("Digite o número do monstro que deseja invocar\n")
-        val aux = readln().toInt()
+        var aux = readln().toInt()
+        aux--
+        while (aux !in 0..player.hand.size-1 || CardControl().isEquipment(player.hand.get(aux)) ){
+            println("Digite um número válido")
+            aux = readln().toInt()
+            aux--
+        }
         val indexNull:Int = player.field.indexOf(player.field.find { it == null })
-        player.field.set(indexNull,player.hand.get(aux-1))
+        player.field.set(indexNull,player.hand.get(aux))
         player.hand.set(aux,null)
     }
 
@@ -153,13 +159,20 @@ class FieldControl () {
         println("Digite o número do monstro que deseja equipar\n")
         var monster:Int = readln().toInt()
         monster--
-
-        while (monster !in 0..player.field.size-1 || CardControl().isEquipment(player.hand.get(monster)) ){
+        //TODO First check if there are unnequiped monsters in the field
+        while (monster !in 0..player.field.size-1 || CardControl().isMonster(player.hand.get(monster)) ){
             println("Digite um número válido")
             monster = readln().toInt()
             monster--
         }
-        CardControl().equipInto(player, player.hand.get(equip)!!, player.field.get(monster)!!)
+        var aux:Boolean = CardControl().equipInto(player, player.hand.get(equip)!!, player.field.get(monster)!!)
+
+        while (!aux) {
+            println("Digite um número válido")
+            monster = readln().toInt()
+            monster--
+            aux = CardControl().equipInto(player, player.hand.get(equip)!!, player.field.get(monster)!!)
+        }
         player.hand[equip]=null
     }
 

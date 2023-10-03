@@ -25,7 +25,7 @@ class CardControl {
                 monster.attack += equip.attack
                 monster.defense += equip.defense
                 monster.equipmentOn = true
-                println("Combinação concluída!\n Surge o "+monster.name)
+                println("Combinação concluída!\nSurge o "+monster.name)
                 return true
             }else{
                 println("Montro já possui equipamento")
@@ -33,9 +33,9 @@ class CardControl {
             }
         }
     }
-    /*
+
     //Check if it's a monster can actually just use isEquipment and expect false to validate
-    private fun isMonster(card: Card): Boolean {
+    fun isMonster(card: Card?): Boolean {
         if (card != null) {
             if (card.cardClass=="monster") {
                 return true
@@ -43,10 +43,11 @@ class CardControl {
                 return false
             }
         }else{
+            println("Nenhuma carta selecionada")
             return false
         }
     }
-     */
+
 
     //Checms if it's an equipmento
     fun isEquipment(card: Card?):Boolean{
@@ -57,6 +58,7 @@ class CardControl {
                 return false
             }
         }else{
+            println("Nenhuma carta selecionada")
             return false
         }
     }

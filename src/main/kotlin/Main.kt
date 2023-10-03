@@ -1,5 +1,6 @@
 
 import control.FieldControl
+import control.PlayerControl
 import model.Card
 import model.Field
 import tools.CardReader
@@ -33,11 +34,20 @@ fun main(args: Array<String>) {
     */
     var i =30
 
+    for ( i in 1..5){
+        PlayerControl().drawCard(field.player1,deck)
+        PlayerControl().drawCard(field.player2,deck)
+    }
+
     //Need to put this into a view package
     do {
         FieldView().roundStart(field)
         //println("Penislandia 3000")
-        FieldView().placePhase(field)
+        //FieldView().placePhase(field)
+
+        FieldControl().placeMonster(field.player1)
+        FieldControl().printPlayerField(field.player1)
+        FieldControl().placeEquipment(field.player1)
 
         FieldControl().invertField(field)
 
