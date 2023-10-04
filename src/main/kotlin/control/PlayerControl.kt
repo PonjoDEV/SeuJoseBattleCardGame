@@ -4,14 +4,13 @@ import model.Card
 import model.Player
 
 class PlayerControl (){
-    //Discarding a card
-    private fun discard(player: Player): Boolean {
-        var cardIndex = player.hand.size
+    //Discarding a card from either hand or the field
+    private fun discard(array: Array<Card?>): Boolean {
+        var cardIndex = array.size
         println("Selecione uma carta entre 1 e $cardIndex para descartar: ")
         cardIndex = readln().toInt()-1
 
-
-        while (cardIndex !in 0..<player.hand.size ||player.hand.get(cardIndex)==null) {
+        while (cardIndex !in 0..<array.size ||array.get(cardIndex)==null) {
             println("Escolha uma posição válida")
             cardIndex= readln().toInt()-1
         }
@@ -26,12 +25,11 @@ class PlayerControl (){
             val indexNull:Int = player.hand.indexOf(player.hand.find { it == null })
             player.hand.set(indexNull,deck.get(deck.size-1))
             deck.removeLast()
-
             return true
         }else{
             printHand(player)
             println("Sua mão está cheia!")
-            aux = discard(player)
+            aux = discard(player.hand)
             drawCard(player, deck)
             return aux
         }
@@ -42,9 +40,10 @@ class PlayerControl (){
             println("(${i+1})${player.hand.get(i)?.toString()}")
         }
         println("#######################################################################################\n############################# Mão de ${player.name} #############################")
+        println("Pontos de vida atuais: ${player.lifePoints} / 10000")
     }
 
-    //Checkign if the player has equippment cards on its hand
+    //Checking if the player has equippment cards on its hand
     fun hasEquipmentCard(hand: Array<Card?>): Boolean {
         return hand.any { it!=null && it.cardClass == "equipamento"}
     }
@@ -61,5 +60,21 @@ class PlayerControl (){
             if (!card.equipmentOn) return true
         }
         return false
+    }
+
+    fun changeMode(field: Array<Card?>) {
+        do {
+            println("Selecione uma carta entre 1 e ${field.size} para alterar sua posição:\nDigite 0 para finalizar as alterações")
+            var aux = readln().toInt()-1
+            if (aux!=-1) {
+                if (aux !in 0..<field.size || field.get(aux) == null) {
+                    println("Digite uma posição válida")
+                    aux = readln().toInt() - 1
+                } else {
+                    CardControl().turn(field.get(aux)!!)
+                    FieldControl().printPlayerField(field)
+                }
+            }
+        }while (aux!=-1)
     }
 }

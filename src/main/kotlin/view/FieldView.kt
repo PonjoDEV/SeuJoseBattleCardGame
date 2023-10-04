@@ -17,7 +17,7 @@ class FieldView {
         if (PlayerControl().hasMonsterCard(player.hand) && !FieldControl().fieldIsFull(player)){
             PlayerControl().printHand(player)
             FieldControl().placeMonster(player)
-            FieldControl().printPlayerField(player)
+            FieldControl().printPlayerField(player.field)
         }else{
             println("Campo cheio, pulando fase de invocação de monstro")
         }
@@ -38,7 +38,6 @@ class FieldView {
         FieldControl().invertField(field)
     }
 
-
     //Lets players attack other monsters or the enemy player directly
     fun battlePhase(field: Field) {
         FieldControl().printWholeField(field)
@@ -47,6 +46,7 @@ class FieldView {
     //Lets players change the card state from attack to defense and vice-versa
     fun changeMode(field: Field) {
 
+        PlayerControl().changeMode(field.player1.field)
+        FieldControl().printWholeField(field)
     }
-
 }

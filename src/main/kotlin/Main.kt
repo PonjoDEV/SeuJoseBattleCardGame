@@ -46,7 +46,7 @@ fun main(args: Array<String>) {
         FieldView().changeMode(field)
         FieldView().battlePhase(field)
         FieldView().placePhase(field.player1)
-        //FieldView().changeMode(field)
+        FieldView().changeMode(field)
         FieldView().endPhase(field)
 
         println("${deck.size} Cartas restantes\n\n")

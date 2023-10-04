@@ -92,22 +92,23 @@ class FieldControl () {
     }
 
     //Prints a single player's field
-    fun printPlayerField(player: Player) {
-        for (i in 0..player.field.size-1){
+    fun printPlayerField(field: Array<Card?>) {
+        for (i in 0..field.size-1){
             print("(${i+1})")
-            if (player.field.get(i) == null){
+            if (field.get(i) == null){
                 println("#######################################################################################")
             }else{
-                println(player.field.get(i).toString())
+                var atkMode:String = if (field.get(i)!!.attackMode==true) "ATK" else "DEF"
+                println(atkMode+" "+field.get(i).toString())
             }
         }
     }
 
     //Prints the Whole field's content
     fun printWholeField(field: Field) {
-        printPlayerField(field.player2)
+        printPlayerField(field.player2.field)
         println("\n##############################################################################################################################################################################\n")
-        printPlayerField(field.player1)
+        printPlayerField(field.player1.field)
         println("\n##############################################################################################################################################################################\n\n")
     }
 
@@ -146,13 +147,16 @@ class FieldControl () {
             val indexNull: Int = player.field.indexOf(player.field.find { it == null })
             player.field.set(indexNull, player.hand.get(aux))
             player.hand.set(aux, null)
-            println("Deseja que o monstro seja invocado em modo de ataque ou defesa?\n1-Ataque\n2-Defesa")
+            println("Deseja que o monstro seja invocado em modo de ataque ou defesa?\n1-Ataque\n0-Defesa")
             aux = readln().toInt()
             if (aux == 1){
                 println(player.field.get(indexNull)!!.name+" Invocado em modo de ataque!")
                 CardControl().turnAttack(player.field.get(indexNull)!!)
             }else{
-                println(player.field.get(indexNull)!!.name+" Invocado em modo de defesa!")
+                if (aux !=0){
+                    println("Escolha inválida, invocando em modo de defesa")
+                }
+                print(" "+player.field.get(indexNull)!!.name+" Invocado em modo de defesa!\n")
             }
             return true
         }else{
@@ -169,6 +173,9 @@ class FieldControl () {
             while (equip !in 0..player.hand.size - 1 || player.hand.get(equip)==null || !CardControl().isEquipment(player.hand.get(equip))) {
                 println("Digite um número válido")
                 equip = readln().toInt()
+                if (equip==0) {
+                    return false
+                }
                 equip--
             }
             println("Digite o número do monstro que deseja equipar\n")
@@ -177,6 +184,9 @@ class FieldControl () {
             while (monster !in 0..player.field.size - 1 || player.field.get(monster)==null || !CardControl().isMonster(player.field.get(monster))) {
                 println("Digite um número válido")
                 monster = readln().toInt()
+                if (monster==0) {
+                    return false
+                }
                 monster--
             }
             var aux: Boolean = CardControl().equipInto(player, player.hand.get(equip)!!, player.field.get(monster)!!)

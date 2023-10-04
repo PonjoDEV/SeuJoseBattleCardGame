@@ -9,6 +9,11 @@ class CardControl {
         card.attackMode = true
     }
 
+    //Alternates between modes, independently of what already is
+    fun turn(card: Card){
+        card.attackMode = !card.attackMode
+    }
+
     //Changing into defense mode
     fun turnDefense(card: Card){
         card.attackMode = false
@@ -33,7 +38,6 @@ class CardControl {
         }
 
     }
-
 
     //Checms if it's an equipmento
     fun isEquipment(card: Card?):Boolean{
