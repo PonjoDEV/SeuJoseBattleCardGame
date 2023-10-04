@@ -8,7 +8,7 @@ class FieldControl () {
     //Initializing Battle Field and players
     fun createField(name1:String, name2:String, deck: MutableList<Card>): Field {
         var field:Field = Field(player1 = Player(name1), player2 = Player(name2), deck = deck)
-        println("O jogo vai começar! \nJogadores:\n${field.player1.name} X ${field.player2.name}\n Comecem!\n\n")
+        println("O jogo vai começar! \nJogadores:\n${field.player1.name} X ${field.player2.name}\n É HORA DO DUELO!\n\n")
         return field
     }
 
@@ -25,7 +25,7 @@ class FieldControl () {
 
     //Checking what the  selected monster is attacking and the outcome
     fun attackAction(player:Player, attacker:Card, enemy:Player, defender:Card?=null):Boolean{
-        if (enemyFielisdEmpty(enemy)){
+        if (fieldIsEmpty(enemy)){
             enemy.lifePoints-=attacker.attack
             return true
         }else if (defender!!.attackMode){
@@ -105,15 +105,15 @@ class FieldControl () {
 
     //Prints the Whole field's content
     fun printWholeField(field: Field) {
-        FieldControl().printPlayerField(field.player2)
+        printPlayerField(field.player2)
         println("\n##############################################################################################################################################################################\n")
-        FieldControl().printPlayerField(field.player1)
+        printPlayerField(field.player1)
         println("\n##############################################################################################################################################################################\n\n")
     }
 
     //Checks if the player's field is full
-    fun fieldIsFull(field: Field): Boolean {
-        if (field.player1.field.all { it !=null}){
+    fun fieldIsFull(player: Player): Boolean {
+        if (player.field.all { it !=null}){
             return true
         }else{
             return false
@@ -121,8 +121,8 @@ class FieldControl () {
     }
 
     //Checks if the player's field is full
-    fun fieldIsEmpty(field: Field): Boolean {
-        if (field.player1.field.all { it ==null}){
+    fun fieldIsEmpty(player: Player): Boolean {
+        if (player.field.all { it ==null}){
             return true
         }else{
             return false
@@ -130,50 +130,61 @@ class FieldControl () {
     }
 
     //Summoning a new monster and excluding it from the players hand
-    fun placeMonster(player: Player) {
-        println("Digite o número do monstro que deseja invocar\n")
+    fun placeMonster(player: Player): Boolean {
+        println("Digite o número do monstro que deseja invocar\nDigite 0 para pular essa etapa\n")
         var aux = readln().toInt()
-        aux--
-        while (aux !in 0..player.hand.size-1 || CardControl().isEquipment(player.hand.get(aux)) ){
-            println("Digite um número válido")
-            aux = readln().toInt()
+        if (aux!=0) {
             aux--
+            while (aux !in 0..player.hand.size - 1 || player.hand.get(aux)==null || CardControl().isEquipment(player.hand.get(aux))) {
+                println("Digite um número válido\nDigite 0 para pular essa etapa\n")
+                aux = readln().toInt()
+                if (aux==0) {
+                    return false
+                }
+                aux--
+            }
+            val indexNull: Int = player.field.indexOf(player.field.find { it == null })
+            player.field.set(indexNull, player.hand.get(aux))
+            player.hand.set(aux, null)
+            println("Deseja que o monstro seja invocado em modo de ataque ou defesa?\n1-Ataque\n2-Defesa")
+            aux = readln().toInt()
+            if (aux == 1){
+                println(player.field.get(indexNull)!!.name+" Invocado em modo de ataque!")
+                CardControl().turnAttack(player.field.get(indexNull)!!)
+            }else{
+                println(player.field.get(indexNull)!!.name+" Invocado em modo de defesa!")
+            }
+            return true
+        }else{
+            return false
         }
-        val indexNull:Int = player.field.indexOf(player.field.find { it == null })
-        player.field.set(indexNull,player.hand.get(aux))
-        player.hand.set(aux,null)
     }
 
     //Equipping a monster and deleting the equipment card from the players hand
-    fun placeEquipment(player: Player) {
-        println("Digite o número do equipamento que deseja usar")
+    fun placeEquipment(player: Player): Boolean {
+        println("Digite o número do equipamento que deseja usar\nDigite 0 para pular essa etapa\n")
         var equip:Int = readln().toInt()
-        equip--
-
-        while (equip !in 0..player.hand.size-1 || !CardControl().isEquipment(player.hand.get(equip)) ){
-            println("Digite um número válido")
-            equip = readln().toInt()
+        if (equip!=0) {
             equip--
-        }
-
-        println("Digite o número do monstro que deseja equipar\n")
-        var monster:Int = readln().toInt()
-        monster--
-        //TODO First check if there are unnequiped monsters in the field
-        while (monster !in 0..player.field.size-1 || CardControl().isMonster(player.hand.get(monster)) ){
-            println("Digite um número válido")
-            monster = readln().toInt()
+            while (equip !in 0..player.hand.size - 1 || player.hand.get(equip)==null || !CardControl().isEquipment(player.hand.get(equip))) {
+                println("Digite um número válido")
+                equip = readln().toInt()
+                equip--
+            }
+            println("Digite o número do monstro que deseja equipar\n")
+            var monster: Int = readln().toInt()
             monster--
+            while (monster !in 0..player.field.size - 1 || player.field.get(monster)==null || !CardControl().isMonster(player.field.get(monster))) {
+                println("Digite um número válido")
+                monster = readln().toInt()
+                monster--
+            }
+            var aux: Boolean = CardControl().equipInto(player, player.hand.get(equip)!!, player.field.get(monster)!!)
+            player.hand[equip] = null
+            return true
+        }else{
+            return false
         }
-        var aux:Boolean = CardControl().equipInto(player, player.hand.get(equip)!!, player.field.get(monster)!!)
-
-        while (!aux) {
-            println("Digite um número válido")
-            monster = readln().toInt()
-            monster--
-            aux = CardControl().equipInto(player, player.hand.get(equip)!!, player.field.get(monster)!!)
-        }
-        player.hand[equip]=null
     }
 
 

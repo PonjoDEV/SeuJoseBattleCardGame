@@ -35,7 +35,7 @@ Escudo da Coragem;Um escudo corajoso que aumenta a defesa do monstro equipado.;0
 Elmo da Resistência Mágica;Um elmo místico que aumenta a defesa do monstro equipado e nega efeitos mágicos.;0;800;equipamento
 Escudo dos Ancestrais;Um escudo ancestral que aumenta a defesa do monstro equipado.;0;1000;equipamento
 ;;0;0;equipamento
-Espada Lendária;Uma espada lendária que aumenta o ataque do monstro equipado.;500;0;monstro
+Espada Lendária;Uma espada lendária que aumenta o ataque do monstro equipado.;500;0;equipamento
 Capa da Agilidade;Uma capa que aumenta a defesa do monstro equipado e aumenta sua velocidade de movimento.;500;0;equipamento
 Anel da Coragem;Um anel que aumenta o ataque do monstro equipado.;600;0;equipamento
 Elmo do Poder;Um elmo místico que aumenta o ataque do monstro equipado.;600;0;equipamento

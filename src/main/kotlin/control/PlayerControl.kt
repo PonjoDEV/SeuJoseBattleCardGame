@@ -33,7 +33,6 @@ class PlayerControl (){
             println("Sua mão está cheia!")
             aux = discard(player)
             drawCard(player, deck)
-
             return aux
         }
     }
@@ -56,9 +55,11 @@ class PlayerControl (){
     }
 
     //Checking if the player has unequipped monsters, not working yet
-    fun hasUnequippedMonsters(field: Array<Card?>): Boolean {
-        return field.any {
-            it!=null && !it.equipmentOn
+    //Checks if there are any unequiped monsters in the player's field
+    fun hasUnequippedMonster(player: Player):Boolean{
+        for (card in player.field) if (card!=null){
+            if (!card.equipmentOn) return true
         }
+        return false
     }
 }
