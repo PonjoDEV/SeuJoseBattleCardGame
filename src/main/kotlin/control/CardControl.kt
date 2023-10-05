@@ -47,4 +47,14 @@ class CardControl {
             return false
         }
     }
+
+    //With this the program should be able to tell if the monster already attacked, preventing it from defending on the same turn
+    fun attacked(attacker: Card) {
+        attacker.hasAttacked=true
+    }
+
+    //Function to reset the cards at the start of the round
+    fun resetCard(attacker: Card) {
+        attacker.hasAttacked=true
+    }
 }

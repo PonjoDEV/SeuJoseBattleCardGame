@@ -8,6 +8,7 @@ import model.Player
 class FieldView {
     //Every beginning of round it prints the field, and draw a card for whoever player the turn is
     fun roundStart(field: Field) {
+        FieldControl().resetField(field.player1.field)
         FieldControl().printWholeField(field)
         PlayerControl().drawCard(field.player1,field.deck)
     }
@@ -40,12 +41,32 @@ class FieldView {
 
     //Lets players attack other monsters or the enemy player directly
     fun battlePhase(field: Field) {
-        FieldControl().printWholeField(field)
+        if (FieldControl().fieldIsEmpty(field.player1)){
+            println("Seu campo está vazio, impossível atacar")
+        }else {
+            FieldControl().printWholeField(field)
+            var attacker: Int = 10
+            var defender: Int = 0
+            while (field.player1.field.any { it!=null && !it.hasAttacked } && attacker!=0) {
+                println("Escolha um de seus monstros para atacar\nDigite 0 para encerrar o turno de ataque")
+                attacker = readln().toInt()-1
+                if (attacker !in 0..field.player1.field.size-1){
+                    if(attacker!=0) println("Digite um número válido")
+                }else{
+                    if (!FieldControl().fieldIsEmpty(field.player2)) {
+                        println("Escolha um alvo ")
+                        defender = readln().toInt()-1
+                        FieldControl().attackAction(field.player1, field.player1.field.get(attacker)!!,field.player2,field.player2.field.get(defender))
+                    }else{
+                        FieldControl().attackAction(field.player1, field.player1.field.get(attacker)!!,field.player2)
+                    }
+                }
+            }
+        }
     }
 
     //Lets players change the card state from attack to defense and vice-versa
     fun changeMode(field: Field) {
-
         PlayerControl().changeMode(field.player1.field)
         FieldControl().printWholeField(field)
     }

@@ -71,8 +71,12 @@ class PlayerControl (){
                     println("Digite uma posição válida")
                     aux = readln().toInt() - 1
                 } else {
-                    CardControl().turn(field.get(aux)!!)
-                    FieldControl().printPlayerField(field)
+                    if (field.get(aux)!!.hasAttacked){
+                        println("Monstro já atacou, impossível trocar para posição de defesa! ")
+                    }else {
+                        CardControl().turn(field.get(aux)!!)
+                        FieldControl().printPlayerField(field)
+                    }
                 }
             }
         }while (aux!=-1)

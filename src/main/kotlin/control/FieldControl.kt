@@ -25,19 +25,25 @@ class FieldControl () {
 
     //Checking what the  selected monster is attacking and the outcome
     fun attackAction(player:Player, attacker:Card, enemy:Player, defender:Card?=null):Boolean{
-        if (fieldIsEmpty(enemy)){
+        var damage:Int=0
+        println("${attacker.name} ataca seu alvo!")
+        if (fieldIsEmpty(enemy)&&defender==null){
             enemy.lifePoints-=attacker.attack
+            println("${enemy.name} está agora com ${enemy.lifePoints} pontos de vida")
             return true
         }else if (defender!!.attackMode){
             if (attacker.attack>defender.attack) {
-                val damage:Int =  (attacker.attack - defender.attack)
+                damage =  (attacker.attack - defender.attack)
                 damageToLP(enemy,damage)
                 destroyMonster(defender)
                 println("Você destruiu ${defender.name} e inflingiu $damage de dano aos pontos de vida inimigos")
+                destroyMonster(defender)
+                CardControl().attacked(attacker)
                 return true
             }else if (attacker.attack==defender.attack){
                 println("Ambos os monstros foram destruídos")
                 destroyMonster(attacker,defender)
+                CardControl().attacked(attacker)
                 return true
             }else{
                 println("Seu monstro é mais fraco que o do inimigo")
@@ -46,17 +52,21 @@ class FieldControl () {
         }else{
             if (defender.defense>=attacker.attack){
                 println("Seu monstro não penetrou a defesa do inimigo")
+                damage=defender.defense-attacker.attack
+                damageToLP(player,damage)
+                CardControl().attacked(attacker)
                 return true
             }else{
                 destroyMonster(defender)
                 println("Você destruiu o monstro inimigo")
+                CardControl().attacked(attacker)
                 return true
             }
         }
     }
 
-    fun damageToLP(enemy:Player,damage: Int) {
-        enemy.lifePoints-=damage
+    fun damageToLP(player:Player, damage: Int) {
+        player.lifePoints-=damage
     }
 
 
@@ -130,7 +140,7 @@ class FieldControl () {
         }
     }
 
-    //Summoning a new monster and excluding it from the players hand
+    //Summoning a new monster and excluding it from the players hand TODO PLAYER SHOULD BE ABLE TO PUT MORE THAN ONE MONSTER
     fun placeMonster(player: Player): Boolean {
         println("Digite o número do monstro que deseja invocar\nDigite 0 para pular essa etapa\n")
         var aux = readln().toInt()
@@ -197,5 +207,12 @@ class FieldControl () {
         }
     }
 
-
+    //This function should reset all the player's card at the start of the round
+    fun resetField(field: Array<Card?>) {
+        for (card in field){
+            if(card!=null){
+                CardControl().resetCard(card)
+            }
+        }
+    }
 }
