@@ -55,6 +55,6 @@ class CardControl {
 
     //Function to reset the cards at the start of the round
     fun resetCard(attacker: Card) {
-        attacker.hasAttacked=true
+        attacker.hasAttacked=false
     }
 }

@@ -7,13 +7,23 @@ import model.Player
 class FieldControl () {
     //Initializing Battle Field and players
     fun createField(name1:String, name2:String, deck: MutableList<Card>): Field {
-        var field:Field = Field(player1 = Player(name1), player2 = Player(name2), deck = deck)
+        val field:Field = Field(player1 = Player(name1), player2 = Player(name2), deck = deck)
         println("O jogo vai começar! \nJogadores:\n${field.player1.name} X ${field.player2.name}\n É HORA DO DUELO!\n\n")
         return field
     }
 
-    fun victory(player: Player,enemy: Player){
-        //TODO HOW'S THE GAME SUPPOSED TO FINISH ?
+    //Checks if the game finished
+    fun victory(player: Player,enemy: Player): Boolean {
+        if (player.lifePoints<=0){
+            println("${enemy.name} VENCEU!!!")
+            return true
+        }else if(enemy.lifePoints<=0){
+            println("${player.name} VENCEU!!!")
+            return true
+        }else{
+            println("EMPATE")
+            return false
+        }
     }
 
     //Inverting position of the field ** PLAYER 2 IS ALWAYS THE ENEMY IN THIS CASE
@@ -35,18 +45,21 @@ class FieldControl () {
             if (attacker.attack>defender.attack) {
                 damage =  (attacker.attack - defender.attack)
                 damageToLP(enemy,damage)
-                destroyMonster(defender)
+                destroyMonster(enemy, defender)
                 println("Você destruiu ${defender.name} e inflingiu $damage de dano aos pontos de vida inimigos")
-                destroyMonster(defender)
                 CardControl().attacked(attacker)
                 return true
             }else if (attacker.attack==defender.attack){
                 println("Ambos os monstros foram destruídos")
-                destroyMonster(attacker,defender)
+                destroyMonster(player,attacker,enemy,defender)
                 CardControl().attacked(attacker)
                 return true
             }else{
                 println("Seu monstro é mais fraco que o do inimigo")
+                destroyMonster(player,attacker)
+                damage=defender.attack-attacker.attack
+                damageToLP(player,damage)
+                CardControl().attacked(attacker)
                 return false
             }
         }else{
@@ -57,7 +70,7 @@ class FieldControl () {
                 CardControl().attacked(attacker)
                 return true
             }else{
-                destroyMonster(defender)
+                destroyMonster(enemy, defender)
                 println("Você destruiu o monstro inimigo")
                 CardControl().attacked(attacker)
                 return true
@@ -65,51 +78,38 @@ class FieldControl () {
         }
     }
 
+    //Removes targets LifePoints by "damage" amount
     fun damageToLP(player:Player, damage: Int) {
         player.lifePoints-=damage
     }
 
-
-
-    fun enemyFielisdEmpty(enemyPlayer:Player):Boolean{
-        //TODO check if the enemy player's field is empty
-
-        return false
-    }
-
-    fun destroyMonster(monster:Card,enemyMonster:Card?=null){
-        //TODO if the monster hit has lower stat than its attacker, destroy it, if its both the same,
-        // destroy both monsters the moster location in the players field will become null
-
+    //Destroy the target monster, and also the attacking monster if its parameter is used
+    fun destroyMonster(enemy: Player, defender:Card, player: Player?=null, attacker:Card?=null){
+        enemy.field[enemy.field.indexOf(defender)] = null
+        if (attacker!=null){
+            player!!.field[player!!.field.indexOf(attacker)] = null
+        }
     }
 
     //Checks if there are no more cards, its parameter is the deck's size
     fun noMoreCards(remainingCards: Int): Boolean {
-        if (remainingCards == 0) {
-            return true
-        } else {
-            return false
-        }
+        if (remainingCards == 0) return true else return false
     }
 
     //checks if the player has reached 0 LP
     fun zeroLifePoints(player: Player): Boolean {
-        if (player.lifePoints <= 0) {
-            return true
-        } else {
-            return false
-        }
+        if (player.lifePoints <= 0) return true else return false
     }
 
     //Prints a single player's field
     fun printPlayerField(field: Array<Card?>) {
-        for (i in 0..field.size-1){
+        for (i in field.indices){
             print("(${i+1})")
-            if (field.get(i) == null){
+            if (field[i] == null){
                 println("#######################################################################################")
             }else{
-                var atkMode:String = if (field.get(i)!!.attackMode==true) "ATK" else "DEF"
-                println(atkMode+" "+field.get(i).toString())
+                val atkMode:String = if (field[i]!!.attackMode) "ATK" else "DEF"
+                println(atkMode+" "+ field[i].toString())
             }
         }
     }
@@ -124,29 +124,20 @@ class FieldControl () {
 
     //Checks if the player's field is full
     fun fieldIsFull(player: Player): Boolean {
-        if (player.field.all { it !=null}){
-            return true
-        }else{
-            return false
-        }
-    }
+        if (player.field.all { it !=null}) return true else return false    }
 
     //Checks if the player's field is full
     fun fieldIsEmpty(player: Player): Boolean {
-        if (player.field.all { it ==null}){
-            return true
-        }else{
-            return false
-        }
+        if (player.field.all { it ==null}) return true else return false
     }
 
     //Summoning a new monster and excluding it from the players hand TODO PLAYER SHOULD BE ABLE TO PUT MORE THAN ONE MONSTER
-    fun placeMonster(player: Player): Boolean {
-        println("Digite o número do monstro que deseja invocar\nDigite 0 para pular essa etapa\n")
-        var aux = readln().toInt()
+    fun placeMonster(player: Player, entry:Int?=null): Boolean {
+        var aux =0
+        if (entry==null) aux = readln().toInt() else aux = entry
         if (aux!=0) {
             aux--
-            while (aux !in 0..player.hand.size - 1 || player.hand.get(aux)==null || CardControl().isEquipment(player.hand.get(aux))) {
+            while (aux !in 0..<player.hand.size || player.hand[aux] ==null || CardControl().isEquipment(player.hand[aux])) {
                 println("Digite um número válido\nDigite 0 para pular essa etapa\n")
                 aux = readln().toInt()
                 if (aux==0) {

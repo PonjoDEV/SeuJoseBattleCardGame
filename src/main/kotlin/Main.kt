@@ -39,21 +39,27 @@ fun main(args: Array<String>) {
         PlayerControl().drawCard(field.player2,deck)
     }
 
-    //Need to put this into a view package
+    //First round, the player is not supposed to attack, so we dont use battlephase yet
+    FieldView().roundStart(field)
+    FieldView().placePhase(field.player1)
+    FieldView().changeMode(field)
+    FieldView().endPhase(field)
+
     do {
         FieldView().roundStart(field)
         FieldView().placePhase(field.player1)
         FieldView().changeMode(field)
         FieldView().battlePhase(field)
+        if(FieldControl().victory(field.player1,field.player2)) break
         FieldView().placePhase(field.player1)
         FieldView().changeMode(field)
         FieldView().endPhase(field)
 
         println("${deck.size} Cartas restantes\n\n")
 
-
-
     }while (!FieldControl().noMoreCards(deck.size)&&!FieldControl().zeroLifePoints(field.player1)&&!FieldControl().zeroLifePoints(field.player2))
+
+    FieldControl().victory(field.player1,field.player2)
 
 }
 
