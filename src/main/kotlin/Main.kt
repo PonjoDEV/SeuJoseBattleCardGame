@@ -59,7 +59,7 @@ fun main(args: Array<String>) {
 
     }while (!FieldControl().noMoreCards(deck.size)&&!FieldControl().zeroLifePoints(field.player1)&&!FieldControl().zeroLifePoints(field.player2))
 
-    FieldControl().victory(field.player1,field.player2)
+    if(deck.size>0) FieldControl().victory(field.player1,field.player2)
 
 }
 
