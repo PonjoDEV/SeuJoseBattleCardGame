@@ -40,7 +40,7 @@ class PlayerControl (){
             println("(${i+1})${player.hand.get(i)?.toString()}")
         }
         println("#######################################################################################\n############################# Mão de ${player.name} #############################")
-        println("Pontos de vida atuais: ${player.lifePoints} / 10000")
+        println("Pontos de vida atuais: ${player.lifePoints} / 10000\n")
     }
 
     //Checking if the player has equippment cards on its hand

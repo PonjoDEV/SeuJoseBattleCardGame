@@ -13,15 +13,17 @@ class FieldControl () {
     }
 
     //Checks if the game finished
-    fun victory(player: Player,enemy: Player): Boolean {
+    fun gameEnd(player: Player, enemy: Player, deck: MutableList<Card>): Boolean {
         if (player.lifePoints<=0){
             println("${enemy.name} VENCEU!!!")
             return true
         }else if(enemy.lifePoints<=0){
             println("${player.name} VENCEU!!!")
             return true
+        }else if (deck.size == 0){
+            println("EMPATE!")
+            return true
         }else{
-            println("EMPATE")
             return false
         }
     }
@@ -39,23 +41,24 @@ class FieldControl () {
         println("${attacker.name} ataca seu alvo!")
         if (fieldIsEmpty(enemy)&&defender==null){
             enemy.lifePoints-=attacker.attack
-            println("${enemy.name} está agora com ${enemy.lifePoints} pontos de vida")
+            println("${enemy.name} está agora com ${enemy.lifePoints} pontos de vida\n")
+            CardControl().attacked(attacker)
             return true
         }else if (defender!!.attackMode){
             if (attacker.attack>defender.attack) {
                 damage =  (attacker.attack - defender.attack)
                 damageToLP(enemy,damage)
                 destroyMonster(enemy, defender)
-                println("Você destruiu ${defender.name} e inflingiu $damage de dano aos pontos de vida inimigos")
+                println("Você destruiu ${defender.name} e inflingiu $damage de dano aos pontos de vida inimigos\n")
                 CardControl().attacked(attacker)
                 return true
             }else if (attacker.attack==defender.attack){
-                println("Ambos os monstros foram destruídos")
+                println("Ambos os monstros foram destruídos\n")
                 destroyMonster(player,attacker,enemy,defender)
                 CardControl().attacked(attacker)
                 return true
             }else{
-                println("Seu monstro é mais fraco que o do inimigo")
+                println("Seu monstro é mais fraco que o do inimigo\n")
                 destroyMonster(player,attacker)
                 damage=defender.attack-attacker.attack
                 damageToLP(player,damage)
@@ -64,14 +67,14 @@ class FieldControl () {
             }
         }else{
             if (defender.defense>=attacker.attack){
-                println("Seu monstro não penetrou a defesa do inimigo")
+                println("Seu monstro não penetrou a defesa do inimigo\n")
                 damage=defender.defense-attacker.attack
                 damageToLP(player,damage)
                 CardControl().attacked(attacker)
                 return true
             }else{
                 destroyMonster(enemy, defender)
-                println("Você destruiu o monstro inimigo")
+                println("Você destruiu o monstro inimigo\n")
                 CardControl().attacked(attacker)
                 return true
             }
@@ -97,7 +100,7 @@ class FieldControl () {
     }
 
     //checks if the player has reached 0 LP
-    fun zeroLifePoints(player: Player): Boolean {
+    fun hasZeroLifePoints(player: Player): Boolean {
         if (player.lifePoints <= 0) return true else return false
     }
 
@@ -117,7 +120,7 @@ class FieldControl () {
     //Prints the Whole field's content
     fun printWholeField(field: Field) {
         printPlayerField(field.player2.field)
-        println("\n##############################################################################################################################################################################\n")
+        println("\n\n##############################################################################################################################################################################\n\n")
         printPlayerField(field.player1.field)
         println("\n##############################################################################################################################################################################\n\n")
     }

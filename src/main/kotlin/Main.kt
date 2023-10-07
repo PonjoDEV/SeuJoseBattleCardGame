@@ -1,6 +1,7 @@
 
 import control.FieldControl
 import control.PlayerControl
+import jdk.swing.interop.SwingInterOpUtils
 import model.Card
 import model.Field
 import tools.CardReader
@@ -38,28 +39,43 @@ fun main(args: Array<String>) {
         PlayerControl().drawCard(field.player1,deck)
         PlayerControl().drawCard(field.player2,deck)
     }
-
-    //First round, the player is not supposed to attack, so we dont use battlephase yet
+    println("PRIMEIRA RODADA, ATAQUES PROIBIDOS")
+    //First round, the player is not supposed to attack, so we don't use battlephase yet
     FieldView().roundStart(field)
+    FieldView().placePhase(field.player1)
     FieldView().placePhase(field.player1)
     FieldView().changeMode(field)
     FieldView().endPhase(field)
+    println("FIM DA PRIMEIRA RODADA, PRÓXIMAS RODADAS ATAQUES PERMITIDOS")
 
     do {
         FieldView().roundStart(field)
         FieldView().placePhase(field.player1)
         FieldView().changeMode(field)
-        FieldView().battlePhase(field)
-        if(FieldControl().victory(field.player1,field.player2)) break
+        while (field.player1.field.any { it != null && !it.hasAttacked && it.attackMode}){
+            println("Deseja atacar ?\n1-Sim\n0-Não")
+            var aux:Int = readln().toInt()
+            if (aux==0){
+                break
+            }else{
+                FieldView().battlePhase(field)
+                if (FieldControl().hasZeroLifePoints(field.player2)||FieldControl().hasZeroLifePoints(field.player1)){
+                    break
+                }
+            }
+        }
+
+        if (FieldControl().gameEnd(field.player1, field.player2, deck)) break
+
         FieldView().placePhase(field.player1)
         FieldView().changeMode(field)
         FieldView().endPhase(field)
 
         println("${deck.size} Cartas restantes\n\n")
 
-    }while (!FieldControl().noMoreCards(deck.size)&&!FieldControl().zeroLifePoints(field.player1)&&!FieldControl().zeroLifePoints(field.player2))
+    }while (!FieldControl().noMoreCards(deck.size)&&!FieldControl().hasZeroLifePoints(field.player1)&&!FieldControl().hasZeroLifePoints(field.player2))
 
-    if(deck.size>0) FieldControl().victory(field.player1,field.player2)
+    if(deck.size>0) FieldControl().gameEnd(field.player1,field.player2,deck)
 
 }
 

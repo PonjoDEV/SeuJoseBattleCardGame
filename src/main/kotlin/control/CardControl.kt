@@ -25,7 +25,7 @@ class CardControl {
             monster.attack += equip.attack
             monster.defense += equip.defense
             monster.equipmentOn = true
-            println("Combinação concluída!\nSurge o "+monster.name)
+            println("Combinação concluída!\nSurge o "+monster.name+"\n ATK: "+monster.attack +" DEF: "+monster.defense+"\n")
             return true
     }
 
