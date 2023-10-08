@@ -30,7 +30,7 @@ class CardReader (){
         }
 
         private fun readCardsCSV(): List<String> {
-            val streamDados:InputStream = File("cartas.csv").inputStream()
+            val streamDados:InputStream = File("D:\\Coding\\Programação mobile\\SeuJoseBattleCardGame\\cartas.csv").inputStream()
             val leitorStream = streamDados.bufferedReader()
             return leitorStream.lineSequence()
                 .filter { it.isNotBlank() }.toList()
